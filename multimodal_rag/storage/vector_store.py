@@ -268,9 +268,7 @@ class MultiVectorIndex:
             )
 
         if promoted:
-            logger.info(
-                "Promoted %s element(s) matching %s", len(promoted), sorted(references)
-            )
+            logger.info("Promoted %s element(s) matching %s", len(promoted), sorted(references))
         return (promoted + sources)[:k]
 
     def _rerank(
@@ -289,7 +287,9 @@ class MultiVectorIndex:
         )
         # Report the original relevance score, not the blended one: the blend is
         # only meaningful relative to this candidate set.
-        return [(hits[int(candidate.key)][0], hits[int(candidate.key)][1]) for candidate, _ in ranked]
+        return [
+            (hits[int(candidate.key)][0], hits[int(candidate.key)][1]) for candidate, _ in ranked
+        ]
 
     def has_document(self, document_id: str) -> bool:
         return self.store.has_document(document_id)

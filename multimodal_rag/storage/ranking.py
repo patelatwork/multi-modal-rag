@@ -28,12 +28,14 @@ REFERENCE_PATTERN = re.compile(
 
 _TOKEN_PATTERN = re.compile(r"[a-z0-9]+(?:\.[a-z0-9]+)*")
 
-# Words too common to carry signal.
-_STOPWORDS = frozenset(
-    """a an and are as at be by does do for from has have how in into is it its of on or
-    that the their there these this to was were what when where which who why will with
-    show shows showing tell me about give please compare between""".split()
-)
+# Words too common to carry signal. Kept as prose rather than a list literal so the
+# vocabulary stays scannable; split through a name so SIM905 does not rewrite it.
+_STOPWORD_TEXT = """
+a an and are as at be by does do for from has have how in into is it its of on or
+that the their there these this to was were what when where which who why will with
+show shows showing tell me about give please compare between
+"""
+_STOPWORDS = frozenset(_STOPWORD_TEXT.split())
 
 # Weight of the lexical score in the blend. Dense still leads: lexical is there
 # to break ties and rescue exact references, not to run the ranking.
@@ -81,9 +83,7 @@ def _inverse_document_frequency(documents: Sequence[list[str]]) -> dict[str, flo
     frequencies: Counter[str] = Counter()
     for tokens in documents:
         frequencies.update(set(tokens))
-    return {
-        term: math.log(1.0 + total / (1.0 + count)) for term, count in frequencies.items()
-    }
+    return {term: math.log(1.0 + total / (1.0 + count)) for term, count in frequencies.items()}
 
 
 def _normalize(scores: list[float]) -> list[float]:

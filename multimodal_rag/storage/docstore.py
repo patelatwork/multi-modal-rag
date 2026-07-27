@@ -231,13 +231,14 @@ class ElementStore:
             clauses.append(f"document_id IN ({placeholders})")
             params.extend(document_ids)
 
-        query = f"SELECT element_id, caption FROM elements WHERE {' AND '.join(clauses)}"  # noqa: S608
+        # Every clause above is a fixed literal holding only `?` placeholders; the
+        # values themselves travel in `params`, so nothing user-supplied is
+        # interpolated into the SQL text.
+        query = f"SELECT element_id, caption FROM elements WHERE {' AND '.join(clauses)}"
         rows = self._connection.execute(query, params).fetchall()
 
         return [
-            row["element_id"]
-            for row in rows
-            if extract_references(row["caption"]) & references
+            row["element_id"] for row in rows if extract_references(row["caption"]) & references
         ]
 
     def list_documents(self) -> list[DocumentRecord]:
