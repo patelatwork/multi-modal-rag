@@ -21,6 +21,7 @@ jobs:
           cache: pip
 
       - run: pip install -r requirements-dev.txt
+      - run: pip install -e .
 
       - name: Lint
         run: |
