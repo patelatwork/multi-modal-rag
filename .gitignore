@@ -4,10 +4,11 @@
 .env.*
 !.env.example
 
-# Indexed data, rendered crops and source PDFs
-data/
-storage/
-static/
+# Indexed data, rendered crops and source PDFs. Anchored to the repo root so
+# these do not swallow the multimodal_rag/storage package.
+/data/
+/storage/
+/static/
 
 # Python
 __pycache__/
