@@ -14,6 +14,7 @@ import pytest
 
 from multimodal_rag.config import Settings
 from multimodal_rag.domain import Element, ElementKind, IndexedElement
+
 from .fixtures.sample_pdf import build_sample_pdf
 
 
