@@ -2,6 +2,12 @@
 .env
 .env.local
 .env.*
+!.env.example
+
+# Indexed data, rendered crops and source PDFs
+data/
+storage/
+static/
 
 # Python
 __pycache__/
@@ -27,11 +33,24 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# Tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
 # Virtual Environments
 .venv/
 venv/
 ENV/
 env/
+
+# Node
+node_modules/
+frontend/dist/
+npm-debug.log*
 
 # IDE / Editors
 .vscode/

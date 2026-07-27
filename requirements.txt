@@ -1,13 +1,32 @@
-langchain>=0.3.0
-langchain-core
-langchain-community
-langchain-classic
-langchain-openai
-unstructured[all-docs]
-chromadb
-pdf2image
-pillow
-python-dotenv
-pydantic
-openai
-tiktoken
+# Runtime dependencies. See pyproject.toml for the authoritative list,
+# and requirements-dev.txt for the test and lint toolchain.
+#
+# Optional OCR backend (scanned PDFs) is NOT installed by default because it
+# also needs poppler and tesseract as system packages:
+#   pip install "unstructured[all-docs]" pdfplumber
+
+# --- configuration
+pydantic>=2.9
+pydantic-settings>=2.5
+python-dotenv>=1.0
+
+# --- LLM and embeddings
+langchain-core>=0.3
+langchain-text-splitters>=0.3
+langchain-groq>=0.2
+langchain-chroma>=0.2
+langchain-huggingface>=0.1
+sentence-transformers>=3.0
+tenacity>=9.0
+
+# --- storage
+chromadb>=0.5
+
+# --- PDF parsing and image rendering
+pymupdf>=1.24
+pillow>=10.0
+
+# --- API
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9
