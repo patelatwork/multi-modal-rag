@@ -16,4 +16,4 @@ frontend/dist
 .env.*
 !.env.example
 *.md
-!Readme.md
+!README.md

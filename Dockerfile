@@ -21,6 +21,10 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
+# CPU-only torch first, so sentence-transformers does not pull the multi-GB
+# CUDA build. Inference runs on Groq; embeddings are small enough for a CPU.
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -39,8 +43,9 @@ ENV INPUT_PDF_DIR=/data/pdfs \
     API_HOST=0.0.0.0
 VOLUME ["/data"]
 
-RUN useradd --create-home --uid 10001 app \
-    && mkdir -p /data && chown -R app:app /data /app
+# UID 1000 because Hugging Face Spaces runs the container as that user.
+RUN useradd --create-home --uid 1000 app \
+    && mkdir -p /data && chown -R app:app /data /app /opt/hf
 USER app
 
 EXPOSE 8000

@@ -1,0 +1,43 @@
+name: Deploy to Hugging Face
+
+# Ships main to the Space once CI has passed on it. Uploads through the hub API
+# rather than `git push`, because Spaces reject plain-git binary files (the
+# overview image is in this repo's history).
+#
+# Setup: add a write-scoped token as the HF_TOKEN secret, and the Space id
+# (e.g. "patelatwork/multi-modal-rag") as the HF_SPACE repository variable.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-hf
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install -U huggingface_hub
+
+      - name: Upload to Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          hf upload "${{ vars.HF_SPACE }}" . . \
+            --repo-type space \
+            --exclude ".git/*" --exclude ".github/*" --exclude "tests/*" \
+            --commit-message "Deploy ${GITHUB_SHA::7}"

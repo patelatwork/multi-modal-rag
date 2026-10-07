@@ -1,3 +1,14 @@
+---
+title: Multimodal RAG
+emoji: 📄
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+app_port: 8000
+short_description: Question answering over PDFs, including figures and tables
+pinned: false
+---
+
 # Multimodal RAG
 
 Question answering over PDFs that actually reads the **figures and tables**, not
